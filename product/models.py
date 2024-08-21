@@ -49,10 +49,12 @@ class Product(models.Model):
         validators=[MinLengthValidator(10), MaxLengthValidator(500)],
         null=True,
         blank=True,
-        is_digital=models.BooleanField(default=False),
     )
+    is_digital = models.BooleanField(default=False)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
-    category = TreeForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+    category = TreeForeignKey(
+        Category, on_delete=models.SET_NULL, null=True, blank=True
+    )
 
     def __str__(self):
         return self.name
