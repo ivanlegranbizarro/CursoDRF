@@ -7,7 +7,7 @@ paths:
   /api/brand/:
     get:
       operationId: brand_list
-      description: A simple Viewset for viewing and editing brands
+      description: A simple Viewset for viewing brands
       tags:
       - brand
       security:
@@ -26,7 +26,7 @@ paths:
   /api/category/:
     get:
       operationId: category_list
-      description: A simple Viewset for viewing and editing categories
+      description: A simple Viewset for viewing categories
       tags:
       - category
       security:
@@ -41,6 +41,25 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Category'
+          description: ''
+  /api/product/:
+    get:
+      operationId: product_list
+      description: A simple Viewset for viewing products
+      tags:
+      - product
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
           description: ''
   /api/schema/:
     get:
@@ -235,6 +254,32 @@ components:
       - name
       - rght
       - tree_id
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        category:
+          $ref: '#/components/schemas/Category'
+        brand:
+          $ref: '#/components/schemas/Brand'
+        name:
+          type: string
+          maxLength: 50
+          minLength: 2
+        description:
+          type: string
+          nullable: true
+          minLength: 10
+          maxLength: 500
+        is_digital:
+          type: boolean
+      required:
+      - brand
+      - category
+      - id
+      - name
   securitySchemes:
     basicAuth:
       type: http

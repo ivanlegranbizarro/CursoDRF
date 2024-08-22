@@ -8,7 +8,7 @@ from .serializers import BrandSerializer, CategorySerializer, ProductSerializer
 
 class CategoryViewSet(viewsets.ViewSet):
     """
-    A simple Viewset for viewing and editing categories
+    A simple Viewset for viewing categories
     """
 
     queryset = Category.objects.all()
@@ -21,7 +21,7 @@ class CategoryViewSet(viewsets.ViewSet):
 
 class BrandViewSet(viewsets.ViewSet):
     """
-    A simple Viewset for viewing and editing brands
+    A simple Viewset for viewing brands
     """
 
     queryset = Brand.objects.all()
@@ -29,4 +29,17 @@ class BrandViewSet(viewsets.ViewSet):
     @extend_schema(responses=BrandSerializer)
     def list(self, request):
         serializer = BrandSerializer(self.queryset, many=True)
+        return Response(serializer.data)
+
+
+class ProductViewSet(viewsets.ViewSet):
+    """
+    A simple Viewset for viewing products
+    """
+
+    queryset = Product.objects.all()
+
+    @extend_schema(responses=ProductSerializer)
+    def list(self, request):
+        serializer = ProductSerializer(self.queryset, many=True)
         return Response(serializer.data)
