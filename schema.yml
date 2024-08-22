@@ -4,6 +4,25 @@ info:
   version: 1.0.0
   description: Ecommerce API with Django REST Framework
 paths:
+  /api/brand/:
+    get:
+      operationId: brand_list
+      description: A simple Viewset for viewing and editing brands
+      tags:
+      - brand
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Brand'
+          description: ''
   /api/category/:
     get:
       operationId: category_list
@@ -171,6 +190,19 @@ paths:
           description: ''
 components:
   schemas:
+    Brand:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+          minLength: 2
+      required:
+      - id
+      - name
     Category:
       type: object
       properties:
