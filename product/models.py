@@ -12,6 +12,7 @@ class Category(MPTTModel):
         validators=[MinLengthValidator(2), MaxLengthValidator(50)],
         null=False,
         blank=False,
+        unique=True,
     )
     parent = TreeForeignKey("self", on_delete=models.PROTECT, null=True, blank=True)
 
@@ -29,6 +30,7 @@ class Brand(models.Model):
         validators=[MinLengthValidator(2), MaxLengthValidator(50)],
         null=False,
         blank=False,
+        unique=True,
     )
 
     def __str__(self):
@@ -42,6 +44,7 @@ class Product(models.Model):
         validators=[MinLengthValidator(2), MaxLengthValidator(50)],
         null=False,
         blank=False,
+        unique=True,
     )
     description = models.TextField(
         "Description",
