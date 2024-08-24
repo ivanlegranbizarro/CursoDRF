@@ -61,6 +61,29 @@ paths:
                 items:
                   $ref: '#/components/schemas/Product'
           description: ''
+  /api/product/category/{category}/:
+    get:
+      operationId: product_category_retrieve
+      description: A simple Viewset for viewing products
+      parameters:
+      - in: path
+        name: category
+        schema:
+          type: integer
+        required: true
+      tags:
+      - product
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
   /api/schema/:
     get:
       operationId: schema_retrieve
@@ -232,28 +255,9 @@ components:
           type: string
           maxLength: 50
           minLength: 2
-        lft:
-          type: integer
-          readOnly: true
-        rght:
-          type: integer
-          readOnly: true
-        tree_id:
-          type: integer
-          readOnly: true
-        level:
-          type: integer
-          readOnly: true
-        parent:
-          type: integer
-          nullable: true
       required:
       - id
-      - level
-      - lft
       - name
-      - rght
-      - tree_id
     Product:
       type: object
       properties:
