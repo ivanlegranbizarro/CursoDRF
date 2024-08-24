@@ -73,3 +73,19 @@ class Product(models.Model):
 
     def __str__(self):
         return self.slug
+
+
+class ProductLine(models.Model):
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        null=False,
+        blank=False,
+    )
+    sku = models.CharField(
+        max_length=100,
+        validators=[MinLengthValidator(1), MaxLengthValidator(100)],
+    )
+    stock_qty = models.PositiveIntegerField(null=False, blank=False, default=0)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True)

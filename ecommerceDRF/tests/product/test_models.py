@@ -18,4 +18,4 @@ class TestBrandModel:
 class TestProductModel:
     def test_str_method(self, product_factory):
         product = product_factory()
-        assert product.__str__() == product.name
+        assert product.__str__() == product.slug

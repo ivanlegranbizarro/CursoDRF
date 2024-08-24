@@ -25,3 +25,4 @@ class ProductFactory(factory.django.DjangoModelFactory):
     description = factory.Sequence(lambda n: f"Description {n}")
     brand = factory.SubFactory(BrandFactory)
     category = factory.SubFactory(CategoryFactory)
+    is_digital = factory.Faker("boolean")
