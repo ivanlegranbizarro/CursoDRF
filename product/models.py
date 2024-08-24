@@ -1,6 +1,7 @@
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
+from django.utils.text import slugify
 
 # Create your models here.
 
@@ -14,7 +15,12 @@ class Category(MPTTModel):
         blank=False,
         unique=True,
     )
-    parent = TreeForeignKey("self", on_delete=models.PROTECT, null=True, blank=True)
+    parent = TreeForeignKey(
+        "self",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+    )
 
     class MPTTMeta:
         order_insertion_by = ["name"]
@@ -46,6 +52,7 @@ class Product(models.Model):
         blank=False,
         unique=True,
     )
+    slug = models.SlugField(unique=True, editable=False, blank=True)
     description = models.TextField(
         "Description",
         max_length=500,
@@ -59,5 +66,10 @@ class Product(models.Model):
         Category, on_delete=models.SET_NULL, null=True, blank=True
     )
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return self.name
+        return self.slug

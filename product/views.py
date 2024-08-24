@@ -2,6 +2,7 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 
 from .models import Brand, Category, Product
 from .serializers import BrandSerializer, CategorySerializer, ProductSerializer
@@ -39,9 +40,13 @@ class ProductViewSet(viewsets.ViewSet):
     """
 
     queryset = Product.objects.all()
+    lookup_field = "slug"
 
     @extend_schema(responses=ProductSerializer)
     def list(self, request):
+        """
+        This is an endpoint for listing all products
+        """
         serializer = ProductSerializer(self.queryset, many=True)
         return Response(serializer.data)
 
@@ -59,4 +64,13 @@ class ProductViewSet(viewsets.ViewSet):
         serializer = ProductSerializer(
             self.queryset.filter(category__name=category), many=True
         )
+        return Response(serializer.data)
+
+    @extend_schema(responses=ProductSerializer)
+    def retrieve(self, request, slug=None):
+        """
+        This is an endpoint for retrieving a single product
+        """
+        product = get_object_or_404(self.queryset, slug=slug)
+        serializer = ProductSerializer(product)
         return Response(serializer.data)
