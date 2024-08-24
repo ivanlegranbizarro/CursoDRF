@@ -39,7 +39,11 @@ class ProductViewSet(viewsets.ViewSet):
     A simple Viewset for viewing products
     """
 
-    queryset = Product.objects.all()
+    queryset = (
+        Product.objects.all()
+        .select_related("category", "brand")
+        .prefetch_related("product_line")
+    )
     lookup_field = "slug"
 
     @extend_schema(responses=ProductSerializer)
