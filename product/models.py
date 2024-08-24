@@ -8,7 +8,6 @@ from django.utils.text import slugify
 
 class Category(MPTTModel):
     name = models.CharField(
-        "Name",
         max_length=50,
         validators=[MinLengthValidator(2), MaxLengthValidator(50)],
         null=False,
@@ -31,7 +30,6 @@ class Category(MPTTModel):
 
 class Brand(models.Model):
     name = models.CharField(
-        "Name",
         max_length=50,
         validators=[MinLengthValidator(2), MaxLengthValidator(50)],
         null=False,
