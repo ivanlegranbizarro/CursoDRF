@@ -87,5 +87,9 @@ class ProductLine(models.Model):
         validators=[MinLengthValidator(1), MaxLengthValidator(100)],
     )
     stock_qty = models.PositiveIntegerField(null=False, blank=False, default=0)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name="product_line",
+    )
     is_active = models.BooleanField(default=True)
