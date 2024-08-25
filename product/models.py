@@ -1,9 +1,16 @@
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import models
-from mptt.models import MPTTModel, TreeForeignKey
 from django.utils.text import slugify
+from mptt.models import MPTTModel, TreeForeignKey
+from .fields import OrderField
 
 # Create your models here.
+
+
+# How to create a custom manager
+# class ActiveManager(models.Manager):
+#     def get_queryset(self):
+#         return super().get_queryset().filter(is_active=True)
 
 
 class Category(MPTTModel):
@@ -43,7 +50,6 @@ class Brand(models.Model):
 
 class Product(models.Model):
     name = models.CharField(
-        "Name",
         max_length=50,
         validators=[MinLengthValidator(2), MaxLengthValidator(50)],
         null=False,
@@ -52,7 +58,6 @@ class Product(models.Model):
     )
     slug = models.SlugField(unique=True, editable=False, blank=True)
     description = models.TextField(
-        "Description",
         max_length=500,
         validators=[MinLengthValidator(10), MaxLengthValidator(500)],
         null=True,
@@ -91,3 +96,7 @@ class ProductLine(models.Model):
         related_name="product_line",
     )
     is_active = models.BooleanField(default=True)
+    order = OrderField(blank=True, unique_for_field="product")
+
+    def __str__(self):
+        return self.order
