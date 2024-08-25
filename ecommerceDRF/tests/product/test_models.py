@@ -26,6 +26,18 @@ class TestProductLineModel:
         product_line = product_line_factory()
         assert product_line.order == 1
 
+    def test_order_is_increased_by_1(
+        self,
+        product_factory,
+        product_line_factory,
+    ):
+        product = product_factory()
+        product_line_1 = product_line_factory(product=product)
+        product_line_2 = product_line_factory(product=product)
+
+        assert product_line_1.order == 1
+        assert product_line_2.order == 2
+
     def test_str_method(self, product_line_factory):
         product_line = product_line_factory()
         assert product_line.__str__() == str(product_line.product)
