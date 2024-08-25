@@ -2,7 +2,6 @@ from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import models
 from django.utils.text import slugify
 from mptt.models import MPTTModel, TreeForeignKey
-from .fields import OrderField
 
 # Create your models here.
 
@@ -96,7 +95,27 @@ class ProductLine(models.Model):
         related_name="product_line",
     )
     is_active = models.BooleanField(default=True)
-    order = OrderField(blank=True, unique_for_field="product")
+    order = models.PositiveIntegerField(blank=True, null=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["product", "order"],
+                name="unique_order_for_product",
+            )
+        ]
+
+    def save(self, *args, **kwargs):
+
+        if self.order is None:
+
+            max_order = ProductLine.objects.filter(product=self.product).aggregate(
+                models.Max("order")
+            )["order__max"]
+
+            self.order = (max_order or 0) + 1
+
+            super().save(*args, **kwargs)
 
     def __str__(self):
         return str(self.product)
