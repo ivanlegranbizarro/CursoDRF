@@ -99,4 +99,4 @@ class ProductLine(models.Model):
     order = OrderField(blank=True, unique_for_field="product")
 
     def __str__(self):
-        return self.order
+        return str(self.product)
