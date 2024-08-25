@@ -24,4 +24,14 @@ class OrderField(models.PositiveIntegerField):
                     id="fields.E300",
                 )
             ]
+        elif self.unique_for_field not in [
+            f.name for f in self.model._meta.get_fields()
+        ]:
+            return [
+                checks.Error(
+                    "OrderField has an invalid value for unique_for_field.",
+                    obj=self,
+                    id="fields.E301",
+                )
+            ]
         return []
