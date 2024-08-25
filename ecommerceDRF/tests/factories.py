@@ -1,6 +1,6 @@
 import factory
 
-from product.models import Brand, Category, Product
+from product.models import Brand, Category, Product, ProductLine
 
 
 class CategoryFactory(factory.django.DjangoModelFactory):
@@ -26,3 +26,19 @@ class ProductFactory(factory.django.DjangoModelFactory):
     brand = factory.SubFactory(BrandFactory)
     category = factory.SubFactory(CategoryFactory)
     is_digital = factory.Faker("boolean")
+
+
+class ProductLineFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = ProductLine
+
+    product = factory.SubFactory(ProductFactory)
+    price = factory.Faker(
+        "pyfloat",
+        left_digits=4,
+        right_digits=2,
+        max_value=1000,
+    )
+    sku = factory.Faker("ean", length=8)
+    stock_qty = factory.Faker("pyint", min_value=0, max_value=100)
+    order = None
