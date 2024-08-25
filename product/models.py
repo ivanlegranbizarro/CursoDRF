@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.text import slugify
 from mptt.models import MPTTModel, TreeForeignKey
 
+
 # Create your models here.
 
 
@@ -106,9 +107,7 @@ class ProductLine(models.Model):
         ]
 
     def save(self, *args, **kwargs):
-
         if self.order is None:
-
             max_order = ProductLine.objects.filter(product=self.product).aggregate(
                 models.Max("order")
             )["order__max"]
