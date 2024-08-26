@@ -108,9 +108,8 @@ class ProductLine(models.Model):
 
     def save(self, *args, **kwargs):
         if self.order is None:
-            max_order = ProductLine.objects.filter(product=self.product).aggregate(
-                models.Max("order")
-            )["order__max"]
+            max_order = ProductLine.objects.filter(product=self.product).aggregate
+            (models.Max("order"))["order__max"]
 
             self.order = (max_order or 0) + 1
 
@@ -118,3 +117,44 @@ class ProductLine(models.Model):
 
     def __str__(self):
         return str(self.product)
+
+
+class ProductImage(models.Model):
+    name = models.CharField(
+        max_length=100,
+        validators=[MinLengthValidator(2), MaxLengthValidator(100)],
+        null=False,
+        blank=False,
+    )
+    alternative_text = models.CharField(
+        max_length=100,
+        validators=[MinLengthValidator(2), MaxLengthValidator(100)],
+    )
+    url = models.ImageField(upload_to=None)
+    productline = models.ForeignKey(
+        ProductLine,
+        on_delete=models.CASCADE,
+        related_name="product_image",
+    )
+    order = models.PositiveIntegerField(blank=True, null=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["productline", "order"],
+                name="unique_order_for_product",
+            )
+        ]
+
+    def save(self, *args, **kwargs):
+        if self.order is None:
+            max_order = ProductImage.objects.filter(
+                productline=self.productline
+            ).aggregate(models.Max("order"))["order__max"]
+
+            self.order = (max_order or 0) + 1
+
+            super().save(*args, **kwargs)
+
+    def __str__(self):
+        return str(self.name)
